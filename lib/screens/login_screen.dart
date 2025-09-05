@@ -22,58 +22,66 @@ class _LoginScreenState extends State<LoginScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 24,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('로그인', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 24),
-              TextField(
-                controller: _idController,
-                decoration: const InputDecoration(
-                  hintText: '아이디를 입력해주세요',
-                  border: OutlineInputBorder(),
-                ),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 24,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _pwController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  hintText: '비밀번호를 입력해주세요',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text('아이디 찾기', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                  Text(' | ', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                  Text('비밀번호 찾기', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                children: [
+                  const Text('로그인', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 24),
+                  TextField(
+                    controller: _idController,
+                    onChanged: (_) => setState(() {}),
+                    decoration: const InputDecoration(
+                      hintText: '아이디를 입력해주세요',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: _pwController,
+                    onChanged: (_) => setState(() {}),
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: '비밀번호를 입력해주세요',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text('아이디 찾기', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      Text(' | ', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      Text('비밀번호 찾기', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: _isFormValid ? () {
+                      print('✅ 로그인 성공!');
+                      Navigator.pop(context);
+                      // TODO: 실제 로그인 성공 후 홈 화면으로 이동하는 로직을 추가하세요.
+                      // 예: Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                    } : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2DB65A),
+                      minimumSize: const Size.fromHeight(48),
+                      disabledBackgroundColor: Colors.grey[300],
+                    ),
+                    child: const Text('로그인', style: TextStyle(color: Colors.white)),
+                  ),
                 ],
               ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _isFormValid ? () {
-                  print('✅ 로그인 성공!');
-                  Navigator.pop(context);
-                } : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2DB65A),
-                  minimumSize: const Size.fromHeight(48),
-                  disabledBackgroundColor: Colors.grey[300],
-                ),
-                child: const Text('로그인', style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
