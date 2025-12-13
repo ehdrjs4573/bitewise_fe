@@ -1,3 +1,5 @@
+// setup_screen.dart
+
 import 'package:flutter/material.dart';
 
 class SetupScreen extends StatefulWidget {
@@ -125,9 +127,9 @@ class _SetupScreenState extends State<SetupScreen> {
               bottom: 30,
               right: 30,
               child: FloatingActionButton(
+                heroTag: 'setupNextButton', 
                 onPressed: isFormFilled
                     ? () {
-                        // 👉 /nextSetup 라우트 이름으로 이동합니다.
                         Navigator.pushNamed(context, '/nextSetup');
                       }
                     : null,

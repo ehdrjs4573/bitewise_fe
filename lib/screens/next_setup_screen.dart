@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// 💡 상태를 관리하기 위해 StatefulWidget을 사용합니다.
 class NextSetupScreen extends StatefulWidget {
   const NextSetupScreen({super.key});
 
@@ -9,13 +8,11 @@ class NextSetupScreen extends StatefulWidget {
 }
 
 class _NextSetupScreenState extends State<NextSetupScreen> {
-  // 💡 사용자가 입력한 값을 저장할 상태 변수들을 선언합니다.
   String _calories = '2500kcal';
   String _carbs = '200g';
   String _protein = '100g';
   String _fat = '50g';
 
-  // 💡 사용자가 입력한 값을 기반으로 다이얼로그를 보여주는 함수입니다.
   Future<void> _showEditDialog(BuildContext context, String label, String currentValue) async {
     final TextEditingController controller = TextEditingController(text: currentValue);
 
@@ -39,7 +36,6 @@ class _NextSetupScreenState extends State<NextSetupScreen> {
             TextButton(
               child: const Text('저장'),
               onPressed: () {
-                // 👉 사용자가 입력한 값으로 상태를 업데이트합니다.
                 setState(() {
                   final newValue = controller.text;
                   if (label == '목표 칼로리') {
@@ -61,7 +57,6 @@ class _NextSetupScreenState extends State<NextSetupScreen> {
     );
   }
 
-  // 💡 UI를 그리는 build 메서드입니다.
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -69,7 +64,6 @@ class _NextSetupScreenState extends State<NextSetupScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF98F6C8),
       body: SafeArea(
-        // 💡 SingleChildScrollView를 Stack으로 감싸서 버튼을 화면에 고정시킵니다.
         child: Stack(
           children: [
             SingleChildScrollView(
@@ -137,33 +131,32 @@ class _NextSetupScreenState extends State<NextSetupScreen> {
                       ),
                     ),
                     
-                    // 💡 버튼 공간 확보를 위해 패딩을 추가합니다.
                     const SizedBox(height: 100),
                   ],
                 ),
               ),
             ),
             
-            // 👉 뒤로 가기 버튼을 추가합니다.
             Positioned(
               bottom: 30,
               left: 30,
               child: FloatingActionButton(
+                heroTag: 'backButtonTag',
                 onPressed: () {
                   Navigator.pop(context);
+                  
                 },
                 backgroundColor: Colors.grey[400], // 회색으로 설정
                 child: const Icon(Icons.arrow_back, color: Colors.white),
               ),
             ),
 
-            // 다음 버튼
             Positioned(
               bottom: 30,
               right: 30,
               child: FloatingActionButton(
+                heroTag: 'nextButtonTag',
                 onPressed: () {
-                  // 👉 MaterialPageRoute 대신 라우트 이름을 사용하여 HomeScreen으로 이동합니다.
                   Navigator.pushNamed(context, '/home');
                 },
                 backgroundColor: const Color(0xFF2DB65A),
@@ -176,7 +169,6 @@ class _NextSetupScreenState extends State<NextSetupScreen> {
     );
   }
 
-  // 💡 이전에 만들어 둔 위젯을 재활용합니다.
   Widget _buildNutrientRow(BuildContext context, String label, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -194,7 +186,6 @@ class _NextSetupScreenState extends State<NextSetupScreen> {
             const SizedBox(width: 8),
             TextButton(
               onPressed: () {
-                // 👉 수정 다이얼로그를 띄우는 함수를 호출합니다.
                 _showEditDialog(context, label, value);
               },
               style: TextButton.styleFrom(

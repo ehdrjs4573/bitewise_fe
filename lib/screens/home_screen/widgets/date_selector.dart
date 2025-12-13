@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// 1. StatefulWidget으로 변경하여 달력의 열림/닫힘 상태를 관리합니다.
 class DateSelector extends StatefulWidget {
   final DateTime selectedDate;
   final Function(DateTime) onDateSelected;
@@ -17,9 +16,7 @@ class DateSelector extends StatefulWidget {
 }
 
 class _DateSelectorState extends State<DateSelector> {
-  // 2. 달력이 열려있는지 여부를 저장하는 상태 변수
   bool _isCalendarOpen = false;
-  // 3. 달력에서 현재 보여주고 있는 달을 저장하는 변수
   late DateTime _focusedMonth;
 
   @override
@@ -28,7 +25,6 @@ class _DateSelectorState extends State<DateSelector> {
     _focusedMonth = widget.selectedDate;
   }
 
-  // ✅ 1. '어제', '오늘', '내일' 레이블을 동적으로 생성하는 함수 추가
   String _getRelativeDateLabel(DateTime date) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -181,19 +177,15 @@ class _DateSelectorState extends State<DateSelector> {
               });
             },
           ),
-          // 5. _isCalendarOpen 상태에 따라 달력을 보여주거나 숨깁니다.
           if (_isCalendarOpen) _buildCalendar(),
         ],
       ),
     );
   }
 
-  // ✅ 2. 상단 날짜 버튼을 그리는 함수를 수정합니다.
   Widget _buildDateButton(BuildContext context, int offset, DateFormat formatter) {
-    // 현재 날짜(now) 기준이 아닌, 선택된 날짜(selectedDate) 기준으로 날짜를 계산합니다.
     final date = widget.selectedDate.add(Duration(days: offset));
     final label = _getRelativeDateLabel(date);
-    // 중앙에 있는 버튼(offset == 0)이 항상 선택된 날짜입니다.
     final isSelected = offset == 0;
     final formattedDate = formatter.format(date);
 
@@ -216,7 +208,6 @@ class _DateSelectorState extends State<DateSelector> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            // 레이블이 있든 없든 일정한 높이를 유지하여 UI가 흔들리지 않게 합니다.
             SizedBox(
               height: 18,
               child: Text(
