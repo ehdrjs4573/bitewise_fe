@@ -8,10 +8,10 @@ class NextSetupScreen extends StatefulWidget {
 }
 
 class _NextSetupScreenState extends State<NextSetupScreen> {
-  String _calories = '2500kcal';
-  String _carbs = '200g';
-  String _protein = '100g';
-  String _fat = '50g';
+  String _calories = '2400kcal';
+  String _carbs = '300g';
+  String _protein = '120g';
+  String _fat = '80g';
 
   Future<void> _showEditDialog(BuildContext context, String label, String currentValue) async {
     final TextEditingController controller = TextEditingController(text: currentValue);
@@ -93,7 +93,7 @@ class _NextSetupScreenState extends State<NextSetupScreen> {
                           ],
                         ),
                         child: const Text(
-                          '기초대사량 : 2000kcal',
+                          '기초대사량 : 1605kcal',
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                         ),
                       ),

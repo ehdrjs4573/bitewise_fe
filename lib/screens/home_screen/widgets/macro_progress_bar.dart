@@ -12,7 +12,7 @@ class MacroProgressBar extends StatelessWidget {
     required this.current,
     required this.target,
     required this.unit,
-  });
+  }); 
 
   @override
   Widget build(BuildContext context) {

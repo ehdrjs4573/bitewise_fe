@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
+  final int selectedIndex;
   final Function(int) onTap;
 
   const BottomNavBar({
     super.key,
+    required this.selectedIndex,
     required this.onTap,
   });
 
@@ -24,7 +26,7 @@ class BottomNavBar extends StatelessWidget {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -39,22 +41,18 @@ class BottomNavBar extends StatelessWidget {
   }
 
   Widget _buildNavItem(int index, IconData icon, String label) {
+    final isSelected = selectedIndex == index;
+    final color = isSelected ? const Color(0xFF00C67E) : Colors.black54;
+
     return InkWell(
       onTap: () => onTap(index),
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: Colors.black54),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 12, color: Colors.black54),
-            ),
-          ],
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(fontSize: 12, color: color)),
+        ],
       ),
     );
   }

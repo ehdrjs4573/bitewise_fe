@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../camera_screen.dart'; // CameraScreen
@@ -9,6 +8,7 @@ import 'widgets/calorie_display.dart';
 import 'widgets/macro_progress_bar.dart';
 import 'widgets/meal_card.dart';
 import 'widgets/bottom_nav_bar.dart';
+import '../nutrition_analysis.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
+int _selectedTabIndex = 1; // 0: 음식AI, 1: 홈, 2: 영양분석
   // 📌 AI 선택 팝업 (다이얼로그로 구현)
   void showAiSelectDialog() {
     showDialog(
@@ -75,17 +75,17 @@ class _HomeScreenState extends State<HomeScreen> {
   // 상태 값들
   DateTime _selectedDate = DateTime.now();
 
-  final int _targetCalories = 2237;
-  int _currentCalories = 0;
+  final int _targetCalories = 2400;
+  int _currentCalories = 680;
 
-  final int _targetCarbs = 319;
-  int _currentCarbs = 145;
+  final int _targetCarbs = 300;
+  int _currentCarbs = 114;
 
   final int _targetProtein = 120;
-  int _currentProtein = 20;
+  int _currentProtein = 14;
 
-  final int _targetFat = 62;
-  int _currentFat = 4;
+  final int _targetFat = 80;
+  int _currentFat = 9;
 
   void _onDateSelected(DateTime newDate) {
     setState(() {
@@ -119,7 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFA1FFD1),
       body: SafeArea(
-        child: Column(
+  child: _selectedTabIndex == 2
+      // =========================
+      // 영양 분석 화면
+      // =========================
+      ? const NutritionAnalysisScreen()
+
+      // =========================
+      // 홈 화면 (기존 코드 그대로)
+      // =========================
+      : Column(
           children: [
             DateSelector(
               selectedDate: _selectedDate,
@@ -143,18 +152,113 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        MealCard(
-                          mealType: '아침',
-                          imagePath: _getImagePathForMeal('아침'),
-                          onTap: () => _onMealCardTapped('아침'),
+                        // 아침 카드 (OCR 영양성분 이미지)
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  Colors.black.withOpacity(0.3),
+                                  BlendMode.darken,
+                                ),
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  transform: Matrix4.rotationX(3.14159),
+                                  child: Image.asset(
+                                    'assets/images/852AD93F-41EE-498B-9BD4-758F78246D73.png',
+                                    width: 150,
+                                    height: 150,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(20),
+                                  onTap: () => _onMealCardTapped('아침'),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text(
+                                        '아침',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          shadows: [
+                                            Shadow(
+                                                blurRadius: 2,
+                                                color: Colors.black)
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Icon(Icons.add,
+                                          size: 32, color: Colors.white),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        MealCard(
-                          mealType: '점심',
-                          imagePath: _getImagePathForMeal('점심'),
-                          onTap: () => _onMealCardTapped('점심'),
-                        ),
-                      ],
+                        // ⬅️ 여기 아래 기존 점심 카드 그대로 이어짐
+
+    // 점심 카드 (진라면 이미지)
+    Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
+            ),
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationX(3.14159), // 상하 반전
+              child: Image.asset(
+                'assets/images/jinramen.png', // ✅ 저장 위치에 맞게 파일명 변경 필요
+                width: 150,
+                height: 150,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        Positioned.fill(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => _onMealCardTapped('점심'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    '점심',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      shadows: [Shadow(blurRadius: 2, color: Colors.black)],
                     ),
+                  ),
+                  SizedBox(height: 8),
+                  Icon(Icons.add, size: 32, color: Colors.white),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  ],
+),
 
                     SizedBox(height: screenHeight * 0.01),
 
@@ -220,13 +324,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             BottomNavBar(
-              onTap: (index) {
-                // BottomNavBar의 인덱스 0 ('음식 AI 검사')를 탭했을 때
-                if (index == 0) {
-                  showAiSelectDialog();
-                }
-              },
-            ),
+  selectedIndex: _selectedTabIndex, // ✅ 이 줄도 필요
+  onTap: (index) {
+    if (index == 0) {
+      showAiSelectDialog();
+    } else {
+      setState(() {
+        _selectedTabIndex = index;
+      });
+    }
+  },
+),
           ],
         ),
       ),
